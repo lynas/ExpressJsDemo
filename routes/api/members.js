@@ -19,10 +19,15 @@ router.get('/', (req, resp) => {
 router.get('/:id', (req, resp) => {
     const found = members.some(member => member.id === parseInt(req.params.id));
     if (!found) {
-        resp.status(404).json({msg: `Member not found with ID : ${req.params.id}`});
+        return resp.status(404).json({msg: `Member not found with ID : ${req.params.id}`});
     }
     resp.json(members.filter(member => member.id === parseInt(req.params.id)));
 
+});
+
+
+router.post('/', (req, resp) => {
+    resp.send(req.body);
 });
 
 module.exports = router;
