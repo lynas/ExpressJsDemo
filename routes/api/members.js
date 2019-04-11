@@ -11,8 +11,28 @@ const members = [
     }
 ];
 
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('./app.db');
+
+
+const getPlayerData = function (callback) {
+    var result = [];
+    db.serialize(function () {
+        db.each('SELECT id, name from member', function (err, row) {
+            console.log(row);
+            result.push(row);
+        }, ()=>{
+            db.close(); //closing connection
+            callback(result);
+        });
+
+    });
+};
+
 router.get('/', (req, resp) => {
-    resp.json(members);
+    getPlayerData(function(data){
+        return resp.json(data);
+    });
 });
 
 
